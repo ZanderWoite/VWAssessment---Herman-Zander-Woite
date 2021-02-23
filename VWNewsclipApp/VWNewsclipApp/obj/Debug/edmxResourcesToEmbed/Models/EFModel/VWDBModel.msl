@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="VWModelsDBModelStoreContainer" CdmEntityContainer="VWModelsDBEntities">
+    <EntitySetMapping Name="CarModels">
+      <EntityTypeMapping TypeName="VWModelsDBModel.CarModel">
+        <MappingFragment StoreEntitySet="CarModel">
+          <ScalarProperty Name="Model_ID" ColumnName="Model_ID" />
+          <ScalarProperty Name="Model_Description" ColumnName="Model_Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Features">
+      <EntityTypeMapping TypeName="VWModelsDBModel.Feature">
+        <MappingFragment StoreEntitySet="Feature">
+          <ScalarProperty Name="Feature_ID" ColumnName="Feature_ID" />
+          <ScalarProperty Name="Feature_Description" ColumnName="Feature_Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SubModels">
+      <EntityTypeMapping TypeName="VWModelsDBModel.SubModel">
+        <MappingFragment StoreEntitySet="SubModel">
+          <ScalarProperty Name="SubModel_ID" ColumnName="SubModel_ID" />
+          <ScalarProperty Name="Model_ID" ColumnName="Model_ID" />
+          <ScalarProperty Name="SubModel_Description" ColumnName="SubModel_Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SubModel_Feature">
+      <EntityTypeMapping TypeName="VWModelsDBModel.SubModel_Feature">
+        <MappingFragment StoreEntitySet="SubModel_Feature">
+          <ScalarProperty Name="SubModel_Feature_ID" ColumnName="SubModel_Feature_ID" />
+          <ScalarProperty Name="Feature_ID" ColumnName="Feature_ID" />
+          <ScalarProperty Name="SubModel_ID" ColumnName="SubModel_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="JoinFeaturesModelsSubModels" FunctionName="VWModelsDBModel.Store.JoinFeaturesModelsSubModels">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="VWModelsDBModel.JoinFeaturesModelsSubModels_Result">
+          <ScalarProperty Name="Model_Description" ColumnName="Model_Description" />
+          <ScalarProperty Name="SubModel_Description" ColumnName="SubModel_Description" />
+          <ScalarProperty Name="Feature_Description" ColumnName="Feature_Description" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="JoinModelFeatureSubModel" FunctionName="VWModelsDBModel.Store.JoinModelFeatureSubModel" />
+  </EntityContainerMapping>
+</Mapping>

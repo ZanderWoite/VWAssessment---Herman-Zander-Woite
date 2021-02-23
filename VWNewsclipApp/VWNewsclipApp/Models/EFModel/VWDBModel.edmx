@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="VWModelsDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CarModel">
+          <Key>
+            <PropertyRef Name="Model_ID" />
+          </Key>
+          <Property Name="Model_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Model_Description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Feature">
+          <Key>
+            <PropertyRef Name="Feature_ID" />
+          </Key>
+          <Property Name="Feature_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Feature_Description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SubModel">
+          <Key>
+            <PropertyRef Name="SubModel_ID" />
+          </Key>
+          <Property Name="SubModel_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Model_ID" Type="int" Nullable="false" />
+          <Property Name="SubModel_Description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SubModel_Feature">
+          <Key>
+            <PropertyRef Name="SubModel_Feature_ID" />
+          </Key>
+          <Property Name="SubModel_Feature_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Feature_ID" Type="int" Nullable="false" />
+          <Property Name="SubModel_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_SubModel_Feature_Feature">
+          <End Role="Feature" Type="Self.Feature" Multiplicity="1" />
+          <End Role="SubModel_Feature" Type="Self.SubModel_Feature" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature">
+              <PropertyRef Name="Feature_ID" />
+            </Principal>
+            <Dependent Role="SubModel_Feature">
+              <PropertyRef Name="Feature_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubModel_Feature_SubModel">
+          <End Role="SubModel" Type="Self.SubModel" Multiplicity="1" />
+          <End Role="SubModel_Feature" Type="Self.SubModel_Feature" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubModel">
+              <PropertyRef Name="SubModel_ID" />
+            </Principal>
+            <Dependent Role="SubModel_Feature">
+              <PropertyRef Name="SubModel_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubModel_Model">
+          <End Role="CarModel" Type="Self.CarModel" Multiplicity="1" />
+          <End Role="SubModel" Type="Self.SubModel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CarModel">
+              <PropertyRef Name="Model_ID" />
+            </Principal>
+            <Dependent Role="SubModel">
+              <PropertyRef Name="Model_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="JoinFeaturesModelsSubModels" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="JoinModelFeatureSubModel" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="VWModelsDBModelStoreContainer">
+          <EntitySet Name="CarModel" EntityType="Self.CarModel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Feature" EntityType="Self.Feature" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubModel" EntityType="Self.SubModel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubModel_Feature" EntityType="Self.SubModel_Feature" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_SubModel_Feature_Feature" Association="Self.FK_SubModel_Feature_Feature">
+            <End Role="Feature" EntitySet="Feature" />
+            <End Role="SubModel_Feature" EntitySet="SubModel_Feature" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubModel_Feature_SubModel" Association="Self.FK_SubModel_Feature_SubModel">
+            <End Role="SubModel" EntitySet="SubModel" />
+            <End Role="SubModel_Feature" EntitySet="SubModel_Feature" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubModel_Model" Association="Self.FK_SubModel_Model">
+            <End Role="CarModel" EntitySet="CarModel" />
+            <End Role="SubModel" EntitySet="SubModel" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VWModelsDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CarModel">
+          <Key>
+            <PropertyRef Name="Model_ID" />
+          </Key>
+          <Property Name="Model_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Model_Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="SubModels" Relationship="Self.FK_SubModel_Model" FromRole="CarModel" ToRole="SubModel" />
+        </EntityType>
+        <EntityType Name="Feature">
+          <Key>
+            <PropertyRef Name="Feature_ID" />
+          </Key>
+          <Property Name="Feature_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Feature_Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="SubModel_Feature" Relationship="Self.FK_SubModel_Feature_Feature" FromRole="Feature" ToRole="SubModel_Feature" />
+        </EntityType>
+        <EntityType Name="SubModel">
+          <Key>
+            <PropertyRef Name="SubModel_ID" />
+          </Key>
+          <Property Name="SubModel_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Model_ID" Type="Int32" Nullable="false" />
+          <Property Name="SubModel_Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="CarModel" Relationship="Self.FK_SubModel_Model" FromRole="SubModel" ToRole="CarModel" />
+          <NavigationProperty Name="SubModel_Feature" Relationship="Self.FK_SubModel_Feature_SubModel" FromRole="SubModel" ToRole="SubModel_Feature" />
+        </EntityType>
+        <EntityType Name="SubModel_Feature">
+          <Key>
+            <PropertyRef Name="SubModel_Feature_ID" />
+          </Key>
+          <Property Name="SubModel_Feature_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Feature_ID" Type="Int32" Nullable="false" />
+          <Property Name="SubModel_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Feature" Relationship="Self.FK_SubModel_Feature_Feature" FromRole="SubModel_Feature" ToRole="Feature" />
+          <NavigationProperty Name="SubModel" Relationship="Self.FK_SubModel_Feature_SubModel" FromRole="SubModel_Feature" ToRole="SubModel" />
+        </EntityType>
+        <Association Name="FK_SubModel_Model">
+          <End Role="CarModel" Type="Self.CarModel" Multiplicity="1" />
+          <End Role="SubModel" Type="Self.SubModel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CarModel">
+              <PropertyRef Name="Model_ID" />
+            </Principal>
+            <Dependent Role="SubModel">
+              <PropertyRef Name="Model_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubModel_Feature_Feature">
+          <End Role="Feature" Type="Self.Feature" Multiplicity="1" />
+          <End Role="SubModel_Feature" Type="Self.SubModel_Feature" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature">
+              <PropertyRef Name="Feature_ID" />
+            </Principal>
+            <Dependent Role="SubModel_Feature">
+              <PropertyRef Name="Feature_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SubModel_Feature_SubModel">
+          <End Role="SubModel" Type="Self.SubModel" Multiplicity="1" />
+          <End Role="SubModel_Feature" Type="Self.SubModel_Feature" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SubModel">
+              <PropertyRef Name="SubModel_ID" />
+            </Principal>
+            <Dependent Role="SubModel_Feature">
+              <PropertyRef Name="SubModel_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VWModelsDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CarModels" EntityType="Self.CarModel" />
+          <EntitySet Name="Features" EntityType="Self.Feature" />
+          <EntitySet Name="SubModels" EntityType="Self.SubModel" />
+          <EntitySet Name="SubModel_Feature" EntityType="Self.SubModel_Feature" />
+          <AssociationSet Name="FK_SubModel_Model" Association="Self.FK_SubModel_Model">
+            <End Role="CarModel" EntitySet="CarModels" />
+            <End Role="SubModel" EntitySet="SubModels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubModel_Feature_Feature" Association="Self.FK_SubModel_Feature_Feature">
+            <End Role="Feature" EntitySet="Features" />
+            <End Role="SubModel_Feature" EntitySet="SubModel_Feature" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SubModel_Feature_SubModel" Association="Self.FK_SubModel_Feature_SubModel">
+            <End Role="SubModel" EntitySet="SubModels" />
+            <End Role="SubModel_Feature" EntitySet="SubModel_Feature" />
+          </AssociationSet>
+          <FunctionImport Name="JoinFeaturesModelsSubModels" ReturnType="Collection(VWModelsDBModel.JoinFeaturesModelsSubModels_Result)" />
+          <FunctionImport Name="JoinModelFeatureSubModel" />
+        </EntityContainer>
+        <ComplexType Name="JoinFeaturesModelsSubModels_Result">
+          <Property Type="String" Name="Model_Description" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="SubModel_Description" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Feature_Description" Nullable="false" MaxLength="50" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VWModelsDBModelStoreContainer" CdmEntityContainer="VWModelsDBEntities">
+          <EntitySetMapping Name="CarModels">
+            <EntityTypeMapping TypeName="VWModelsDBModel.CarModel">
+              <MappingFragment StoreEntitySet="CarModel">
+                <ScalarProperty Name="Model_ID" ColumnName="Model_ID" />
+                <ScalarProperty Name="Model_Description" ColumnName="Model_Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Features">
+            <EntityTypeMapping TypeName="VWModelsDBModel.Feature">
+              <MappingFragment StoreEntitySet="Feature">
+                <ScalarProperty Name="Feature_ID" ColumnName="Feature_ID" />
+                <ScalarProperty Name="Feature_Description" ColumnName="Feature_Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubModels">
+            <EntityTypeMapping TypeName="VWModelsDBModel.SubModel">
+              <MappingFragment StoreEntitySet="SubModel">
+                <ScalarProperty Name="SubModel_ID" ColumnName="SubModel_ID" />
+                <ScalarProperty Name="Model_ID" ColumnName="Model_ID" />
+                <ScalarProperty Name="SubModel_Description" ColumnName="SubModel_Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubModel_Feature">
+            <EntityTypeMapping TypeName="VWModelsDBModel.SubModel_Feature">
+              <MappingFragment StoreEntitySet="SubModel_Feature">
+                <ScalarProperty Name="SubModel_Feature_ID" ColumnName="SubModel_Feature_ID" />
+                <ScalarProperty Name="Feature_ID" ColumnName="Feature_ID" />
+                <ScalarProperty Name="SubModel_ID" ColumnName="SubModel_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="JoinFeaturesModelsSubModels" FunctionName="VWModelsDBModel.Store.JoinFeaturesModelsSubModels">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VWModelsDBModel.JoinFeaturesModelsSubModels_Result">
+                <ScalarProperty Name="Model_Description" ColumnName="Model_Description" />
+                <ScalarProperty Name="SubModel_Description" ColumnName="SubModel_Description" />
+                <ScalarProperty Name="Feature_Description" ColumnName="Feature_Description" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="JoinModelFeatureSubModel" FunctionName="VWModelsDBModel.Store.JoinModelFeatureSubModel" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
